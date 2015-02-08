@@ -1,2 +1,9 @@
-# rokontrol
-Android library for controlling Roku Media Player
+Rokontrol
+=======
+
+An Roku external remote control library for Android
+
+Usage
+--------
+
+See sample app
