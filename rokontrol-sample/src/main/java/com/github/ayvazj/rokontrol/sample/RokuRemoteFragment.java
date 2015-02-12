@@ -9,14 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
 import com.github.ayvazj.rokontrol.RokuAppInfo;
 import com.github.ayvazj.rokontrol.RokuButton;
 import com.github.ayvazj.rokontrol.RokuExControlClient;
 import com.github.ayvazj.rokontrol.RokuKey;
 import com.github.ayvazj.rokontrol.RokuSearchResult;
-
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import com.github.ayvazj.rokontrol.http.RokuHttpResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -115,7 +115,7 @@ public class RokuRemoteFragment extends Fragment implements RokuButton.RokuButto
     @Override
     public void onResume() {
         super.onResume();
-        this.rokuClient = RokuExControlClient.connect(this.mRsr);
+        this.rokuClient = RokuExControlClient.connect(getActivity().getApplication().getApplicationContext(), this.mRsr);
         this.rokuClient.queryApps(new RokuExControlClient.QueryAppsCallback() {
             @Override
             public void onError(Request request, IOException e) {
@@ -172,7 +172,7 @@ public class RokuRemoteFragment extends Fragment implements RokuButton.RokuButto
         }
 
         @Override
-        public void onSuccess(Response response) {
+        public void onSuccess(RokuHttpResponse response) {
 
         }
     };
