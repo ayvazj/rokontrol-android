@@ -15,7 +15,8 @@ public enum RokuKey {
     INFO("info"),
     BACKSPACE("backspace"),
     SEARCH("search"),
-    ENTER("enter");
+    ENTER("enter"),
+    UNDEFINED(null);
 
     public final String endpoint;
 
@@ -34,6 +35,6 @@ public enum RokuKey {
                 return v;
             }
         }
-        throw new IllegalArgumentException();
+        return UNDEFINED;
     }
 }
