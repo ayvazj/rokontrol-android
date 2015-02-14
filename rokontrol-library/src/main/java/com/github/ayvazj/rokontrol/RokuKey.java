@@ -15,8 +15,7 @@ public enum RokuKey {
     INFO("info"),
     BACKSPACE("backspace"),
     SEARCH("search"),
-    ENTER("enter")
-    ;
+    ENTER("enter");
 
     public final String endpoint;
 
@@ -27,5 +26,14 @@ public enum RokuKey {
     @Override
     public String toString() {
         return this.endpoint;
+    }
+
+    public static RokuKey getValueOf(String value) {
+        for (RokuKey v : values()) {
+            if (v.endpoint.equalsIgnoreCase(value)) {
+                return v;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 }
