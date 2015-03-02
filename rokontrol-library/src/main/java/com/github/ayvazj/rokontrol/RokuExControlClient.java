@@ -3,6 +3,7 @@ package com.github.ayvazj.rokontrol;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -166,6 +167,7 @@ public class RokuExControlClient {
                     }
                 }
         );
+        getRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0, 1.0f));
         RokuHttpClient.getInstance(this.context).getRequestQueue().add(getRequest);
     }
 
