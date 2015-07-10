@@ -31,6 +31,7 @@ public class RokuExControlClient {
         return client;
     }
 
+
     public void keyPress(RokuKey key, final KeypressCallback listener) {
         String url = String.format("/keypress/%s", key);
         post(url, new HttpCallback() {
@@ -87,6 +88,32 @@ public class RokuExControlClient {
             @Override
             public void onSuccess(RokuHttpResponse response) {
                 listener.onSuccess(response);
+            }
+        });
+    }
+
+    public void getDeviceInfo(final DeviceInfoCallback listener) {
+        String url = "/";
+        get(url, new HttpCallback() {
+            @Override
+            public void onError(final Request request, final IOException e) {
+                listener.onError(request, e);
+            }
+
+            @Override
+            public void onFailure(final Response response, final Throwable throwable) {
+                listener.onFailure(response, throwable);
+            }
+
+            @Override
+            public void onSuccess(final RokuHttpResponse response) {
+                RokuDeviceInfo deviceInfo = null;
+                try {
+                    deviceInfo = RokuDeviceInfo.parseXml(new String(response.response.data, "UTF-8"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                listener.onSuccess(deviceInfo);
             }
         });
     }
@@ -212,6 +239,27 @@ public class RokuExControlClient {
          * @param response
          */
         public void onSuccess(final RokuHttpResponse response);
+    }
+
+    public interface DeviceInfoCallback {
+
+        public void onError(final Request request, final IOException e);
+
+        /**
+         * called when the server response was not 2xx or when an exception was thrown in the process
+         *
+         * @param response  - in case of server error (4xx, 5xx) this contains the server response
+         *                  in case of IO exception this is null
+         * @param throwable - contains the exception. in case of server error (4xx, 5xx) this is null
+         */
+        public void onFailure(final Response response, final Throwable throwable);
+
+        /**
+         * contains the server response
+         *
+         * @param rokuDeviceInfo
+         */
+        public void onSuccess(final RokuDeviceInfo rokuDeviceInfo);
     }
 
     public interface QueryAppsCallback {
