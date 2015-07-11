@@ -3,23 +3,20 @@ Rokontrol
 
 Roku external remote client for Android.
 
-For more information please see [the website][1].
-
-
 Download
 --------
 
-Download [the latest JAR][2] or grab via Maven:
+Download [the latest AAR][2] or grab via Maven:
 ```xml
 <dependency>
   <groupId>com.github.ayvazj.android.rokontrol</groupId>
   <artifactId>rokontrol-library</artifactId>
-  <version>0.2</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.github.ayvazj.android.rokontrol:rokontrol-library:0.2'
+compile 'com.github.ayvazj.android.rokontrol:rokontrol-library:0.2.0@aar'
 ```
 
 Usage
@@ -66,3 +63,5 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+[2]: https://dl.bintray.com/ayvazj/maven/com/github/ayvazj/android/rokontrol/rokontrol-library/0.2.0/#rokontrol-library-0.2.0.aar

@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 
-def androidSupportLibVersion = "21.0.3'";
+def androidSupportLibVersion = "22.2.0";
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 22
     buildToolsVersion "21.1.2"
 
     defaultConfig {
@@ -26,5 +26,5 @@ dependencies {
     compile ("com.android.support:support-v4:${androidSupportLibVersion}")
     compile ("com.android.support:appcompat-v7:${androidSupportLibVersion}")
     compile ('com.squareup.picasso:picasso:2.4.0')
-    compile project(':rokontrol-library')
+    compile ('com.github.ayvazj.android.rokontrol:rokontrol-library:0.2.0')
 }
