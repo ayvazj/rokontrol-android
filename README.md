@@ -64,4 +64,4 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
 
-[2]: https://dl.bintray.com/ayvazj/maven/com/github/ayvazj/android/rokontrol/rokontrol-library/0.2.0/#rokontrol-library-0.2.0.aar
+[2]: https://dl.bintray.com/ayvazj/maven/com/github/ayvazj/android/rokontrol/rokontrol-library/0.2.0/rokontrol-library-0.2.0.aar
