@@ -81,8 +81,8 @@ public class RokuExControlClientTest {
     }
 
     @Test
-    public void testDeviceInfo() throws Exception {
-        client.getDeviceInfo(new RokuExControlClient.DeviceInfoCallback() {
+    public void testDeviceData() throws Exception {
+        client.getDeviceData(new RokuExControlClient.DeviceDataCallback() {
             @Override
             public void onError(Request request, IOException e) {
                 Assert.fail(e.getMessage());
@@ -94,11 +94,11 @@ public class RokuExControlClientTest {
             }
 
             @Override
-            public void onSuccess(RokuDeviceInfo rokuDeviceInfo) {
-                Assert.assertNotNull(rokuDeviceInfo);
-                Assert.assertTrue(rokuDeviceInfo.manufacturer.toUpperCase().contains("ROKU"));
+            public void onSuccess(RokuDeviceData rokuDeviceData) {
+                Assert.assertNotNull(rokuDeviceData);
+                Assert.assertTrue(rokuDeviceData.manufacturer.toUpperCase().contains("ROKU"));
 
-                Assert.assertFalse(rokuDeviceInfo.serviceList.size() == 0);
+                Assert.assertFalse(rokuDeviceData.serviceList.size() == 0);
             }
         });
     }
@@ -145,6 +145,27 @@ public class RokuExControlClientTest {
                 for (RokuAppInfo app : rokuAppInfoList) {
                     Assert.assertFalse(null == client.getIconUrl(app.id));
                 }
+            }
+        });
+    }
+
+    @Test
+    public void testQueryDeviceInfo() throws Exception {
+        client.queryDeviceInfo(new RokuExControlClient.DeviceInfoCallback() {
+            @Override
+            public void onError(Request request, IOException e) {
+                Assert.fail(e.getMessage());
+            }
+
+            @Override
+            public void onFailure(Response response, Throwable throwable) {
+                Assert.fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(RokuDeviceInfo rokuDeviceInfo) {
+                Assert.assertNotNull(rokuDeviceInfo);
+                Assert.assertTrue(rokuDeviceInfo.vendorName.toUpperCase().contains("ROKU"));
             }
         });
     }

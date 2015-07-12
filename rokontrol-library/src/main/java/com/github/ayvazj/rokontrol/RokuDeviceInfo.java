@@ -7,101 +7,173 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class RokuDeviceInfo {
-    public final String deviceType;
-    public final String friendlyName;
-    public final String manufacturer;
-    public final String manufacturerURL;
-    public final String modelDescription;
-    public final String modelName;
-    public final String modelNumber;
-    public final String modelURL;
-    public final String serialNumber;
     public final String UDN;
-    public final List<RokuServiceInfo> serviceList;
+    public final String serialNumber;
+    public final String deviceId;
+    public final String vendorName;
+    public final String modelNumber;
+    public final String modelName;
+    public final String userDeviceName;
+    public final String softwareVersion;
+    public final String softwareBuild;
+    public final boolean secureDevice;
+    public final String language;
+    public final String country;
+    public final String locale;
+    public final String powerMode;
+    public final boolean developerEnabled;
+    public final boolean searchEnabled;
+    public final boolean voiceSearchEnabled;
+    public final boolean notificationsEnabled;
+    public final boolean notificationsFirstUse;
+    public final boolean headphonesConnected;
 
 
-    public RokuDeviceInfo(String deviceType, String friendlyName, String manufacturer, String manufacturerURL,
-                          String modelDescription, String modelName, String modelNumber, String modelURL, String UDN, String serialNumber, List<RokuServiceInfo> serviceList) {
-        this.deviceType = deviceType;
-        this.friendlyName = friendlyName;
-        this.manufacturer = manufacturer;
-        this.manufacturerURL = manufacturerURL;
-        this.modelDescription = modelDescription;
-        this.modelName = modelName;
-        this.modelNumber = modelNumber;
-        this.modelURL = modelURL;
-        this.serialNumber = serialNumber;
+    private RokuDeviceInfo(String UDN,
+                           String serialNumber,
+                           String deviceId,
+                           String vendorName,
+                           String modelNumber,
+                           String modelName,
+                           String userDeviceName,
+                           String softwareVersion,
+                           String softwareBuild,
+                           boolean secureDevice,
+                           String language,
+                           String country,
+                           String locale,
+                           String powerMode,
+                           boolean developerEnabled,
+                           boolean searchEnabled,
+                           boolean voiceSearchEnabled,
+                           boolean notificationsEnabled,
+                           boolean notificationsFirstUse,
+                           boolean headphonesConnected) {
         this.UDN = UDN;
-        this.serviceList = serviceList;
+        this.serialNumber = serialNumber;
+        this.deviceId = deviceId;
+        this.vendorName = vendorName;
+        this.modelNumber = modelNumber;
+        this.modelName = modelName;
+        this.userDeviceName = userDeviceName;
+        this.softwareVersion = softwareVersion;
+        this.softwareBuild = softwareBuild;
+        this.secureDevice = secureDevice;
+        this.language = language;
+        this.country = country;
+        this.locale = locale;
+        this.powerMode = powerMode;
+        this.developerEnabled = developerEnabled;
+        this.searchEnabled = searchEnabled;
+        this.voiceSearchEnabled = voiceSearchEnabled;
+        this.notificationsEnabled = notificationsEnabled;
+        this.notificationsFirstUse = notificationsFirstUse;
+        this.headphonesConnected = headphonesConnected;
     }
 
-    static RokuDeviceInfo parseXml(String xmlstr) {
+    public static RokuDeviceInfo parseXml(String xmlstr) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document dom = builder.parse(new ByteArrayInputStream(xmlstr.getBytes()));
             Element root = dom.getDocumentElement();
-            NodeList devices = root.getElementsByTagName("device");
-            for (int i = 0; i < devices.getLength(); i++) {
-                if (devices.item(i).getNodeType() != Node.ELEMENT_NODE) {
+            NodeList children = root.getChildNodes();
+
+            String UDN = "";
+            String serialNumber = "";
+            String deviceId = "";
+            String vendorName = "";
+            String modelNumber = "";
+            String modelName = "";
+            String userDeviceName = "";
+            String softwareVersion = "";
+            String softwareBuild = "";
+            boolean secureDevice = false;
+            String language = "";
+            String country = "";
+            String locale = "";
+            String powerMode = "";
+            boolean developerEnabled = false;
+            boolean searchEnabled = false;
+            boolean voiceSearchEnabled = false;
+            boolean notificationsEnabled = false;
+            boolean notificationsFirstUse = false;
+            boolean headphonesConnected = false;
+
+            for (int i = 0; i < children.getLength(); i++) {
+                if (children.item(i).getNodeType() != Node.ELEMENT_NODE) {
                     continue;
                 }
-                Element device = (Element) devices.item(i);
+                Element childElement = (Element) children.item(i);
 
-                String deviceType = "";
-                String friendlyName = "";
-                String manufacturer = "";
-                String manufacturerURL = "";
-                String modelDescription = "";
-                String modelName = "";
-                String modelNumber = "";
-                String modelURL = "";
-                String serialNumber = "";
-                String UDN = "";
-                List<RokuServiceInfo> serviceList = new ArrayList<RokuServiceInfo>();
 
-                NodeList children = device.getChildNodes();
-                for (int ci = 0; ci < children.getLength(); ci++) {
-                    if (children.item(ci).getNodeType() != Node.ELEMENT_NODE) {
-                        continue;
-                    }
-                    Element childElement = (Element) children.item(ci);
-                    if ("deviceType".equals(childElement.getTagName())) {
-                        deviceType = childElement.getTextContent();
-                    } else if ("friendlyName".equals(childElement.getTagName())) {
-                        friendlyName = childElement.getTextContent();
-                    } else if ("manufacturer".equals(childElement.getTagName())) {
-                        manufacturer = childElement.getTextContent();
-                    } else if ("manufacturerURL".equals(childElement.getTagName())) {
-                        manufacturerURL = childElement.getTextContent();
-                    } else if ("modelDescription".equals(childElement.getTagName())) {
-                        modelDescription = childElement.getTextContent();
-                    } else if ("modelName".equals(childElement.getTagName())) {
-                        modelName = childElement.getTextContent();
-                    } else if ("modelNumber".equals(childElement.getTagName())) {
-                        modelNumber = childElement.getTextContent();
-                    } else if ("modelURL".equals(childElement.getTagName())) {
-                        modelURL = childElement.getTextContent();
-                    } else if ("serialNumber".equals(childElement.getTagName())) {
-                        serialNumber = childElement.getTextContent();
-                    } else if ("UDN".equals(childElement.getTagName())) {
-                        UDN = childElement.getTextContent();
-                    } else if ("serviceList".equals(childElement.getTagName())) {
-                        serviceList = RokuServiceInfo.parseXml(childElement);
-                    }
+                if ("udn".equals(childElement.getTagName())) {
+                    UDN = childElement.getTextContent();
+                } else if ("serial-number".equals(childElement.getTagName())) {
+                    serialNumber = childElement.getTextContent();
+                } else if ("device-id".equals(childElement.getTagName())) {
+                    deviceId = childElement.getTextContent();
+                } else if ("vendor-name".equals(childElement.getTagName())) {
+                    vendorName = childElement.getTextContent();
+                } else if ("model-number".equals(childElement.getTagName())) {
+                    modelNumber = childElement.getTextContent();
+                } else if ("model-name".equals(childElement.getTagName())) {
+                    modelName = childElement.getTextContent();
+                } else if ("user-device-name".equals(childElement.getTagName())) {
+                    userDeviceName = childElement.getTextContent();
+                } else if ("software-version".equals(childElement.getTagName())) {
+                    softwareVersion = childElement.getTextContent();
+                } else if ("software-build".equals(childElement.getTagName())) {
+                    softwareBuild = childElement.getTextContent();
+                } else if ("language".equals(childElement.getTagName())) {
+                    language = childElement.getTextContent();
+                } else if ("country".equals(childElement.getTagName())) {
+                    country = childElement.getTextContent();
+                } else if ("locale".equals(childElement.getTagName())) {
+                    locale = childElement.getTextContent();
+                } else if ("power-mode".equals(childElement.getTagName())) {
+                    powerMode = childElement.getTextContent();
+                } else if ("developer-enabled".equals(childElement.getTagName())) {
+                    developerEnabled = Boolean.valueOf(childElement.getTextContent());
+                } else if ("search-enabled".equals(childElement.getTagName())) {
+                    searchEnabled = Boolean.valueOf(childElement.getTextContent());
+                } else if ("voide-search-enabled".equals(childElement.getTagName())) {
+                    voiceSearchEnabled = Boolean.valueOf(childElement.getTextContent());
+                } else if ("notifications-enabled".equals(childElement.getTagName())) {
+                    notificationsEnabled = Boolean.valueOf(childElement.getTextContent());
+                } else if ("notifications-first-use".equals(childElement.getTagName())) {
+                    notificationsFirstUse = Boolean.valueOf(childElement.getTextContent());
+                } else if ("headphones-connected".equals(childElement.getTagName())) {
+                    headphonesConnected = Boolean.valueOf(childElement.getTextContent());
                 }
-
-                return new RokuDeviceInfo(deviceType, friendlyName, manufacturer, manufacturerURL,
-                        modelDescription, modelName, modelNumber, modelURL, UDN, serialNumber, serviceList);
             }
+            return new RokuDeviceInfo(UDN,
+                    serialNumber,
+                    deviceId,
+                    vendorName,
+                    modelNumber,
+                    modelName,
+                    userDeviceName,
+                    softwareVersion,
+                    softwareBuild,
+                    secureDevice,
+                    language,
+                    country,
+                    locale,
+                    powerMode,
+                    developerEnabled,
+                    searchEnabled,
+                    voiceSearchEnabled,
+                    notificationsEnabled,
+                    notificationsFirstUse,
+                    headphonesConnected);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -92,7 +92,7 @@ public class RokuExControlClient {
         });
     }
 
-    public void getDeviceInfo(final DeviceInfoCallback listener) {
+    public void getDeviceData(final DeviceDataCallback listener) {
         String url = "/";
         get(url, new HttpCallback() {
             @Override
@@ -107,9 +107,9 @@ public class RokuExControlClient {
 
             @Override
             public void onSuccess(final RokuHttpResponse response) {
-                RokuDeviceInfo deviceInfo = null;
+                RokuDeviceData deviceInfo = null;
                 try {
-                    deviceInfo = RokuDeviceInfo.parseXml(new String(response.response.data, "UTF-8"));
+                    deviceInfo = RokuDeviceData.parseXml(new String(response.response.data, "UTF-8"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -144,6 +144,46 @@ public class RokuExControlClient {
         });
     }
 
+    public void launchApp(String appId, final LaunchAppCallback listener) {
+        String url = String.format("/launch/%s", appId);
+        post(url, new HttpCallback() {
+            @Override
+            public void onError(Request request, IOException e) {
+                listener.onError(request, e);
+            }
+
+            @Override
+            public void onFailure(Response response, Throwable throwable) {
+                listener.onFailure(response, throwable);
+            }
+
+            @Override
+            public void onSuccess(RokuHttpResponse response) {
+                listener.onSuccess();
+            }
+        });
+    }
+
+    public void launchApp(RokuAppInfo appInfo, final LaunchAppCallback listener) {
+        String url = String.format("/launch/%s", appInfo.id);
+        post(url, new HttpCallback() {
+            @Override
+            public void onError(Request request, IOException e) {
+                listener.onError(request, e);
+            }
+
+            @Override
+            public void onFailure(Response response, Throwable throwable) {
+                listener.onFailure(response, throwable);
+            }
+
+            @Override
+            public void onSuccess(RokuHttpResponse response) {
+                listener.onSuccess();
+            }
+        });
+    }
+
     public String getIconUrl(String appId) {
         String location = this.rokuSearchResult.location;
         // remove trailing slash
@@ -152,6 +192,32 @@ public class RokuExControlClient {
         }
         String url = String.format("/query/icon/%s", appId);
         return url = String.format("%s%s", location, url);
+    }
+
+    public void queryDeviceInfo(final DeviceInfoCallback listener) {
+        String url = "/query/device-info";
+        get(url, new HttpCallback() {
+            @Override
+            public void onError(final Request request, final IOException e) {
+                listener.onError(request, e);
+            }
+
+            @Override
+            public void onFailure(final Response response, final Throwable throwable) {
+                listener.onFailure(response, throwable);
+            }
+
+            @Override
+            public void onSuccess(final RokuHttpResponse response) {
+                RokuDeviceInfo deviceInfo = null;
+                try {
+                    deviceInfo = RokuDeviceInfo.parseXml(new String(response.response.data, "UTF-8"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                listener.onSuccess(deviceInfo);
+            }
+        });
     }
 
     public void get(String url, HttpCallback cb) {
@@ -241,7 +307,7 @@ public class RokuExControlClient {
         public void onSuccess(final RokuHttpResponse response);
     }
 
-    public interface DeviceInfoCallback {
+    public interface DeviceDataCallback {
 
         public void onError(final Request request, final IOException e);
 
@@ -257,9 +323,9 @@ public class RokuExControlClient {
         /**
          * contains the server response
          *
-         * @param rokuDeviceInfo
+         * @param rokuDeviceData
          */
-        public void onSuccess(final RokuDeviceInfo rokuDeviceInfo);
+        public void onSuccess(final RokuDeviceData rokuDeviceData);
     }
 
     public interface QueryAppsCallback {
@@ -281,5 +347,45 @@ public class RokuExControlClient {
          * @param rokuAppInfoList
          */
         public void onSuccess(final List<RokuAppInfo> rokuAppInfoList);
+    }
+
+    public interface LaunchAppCallback {
+
+        public void onError(final Request request, final IOException e);
+
+        /**
+         * called when the server response was not 2xx or when an exception was thrown in the process
+         *
+         * @param response  - in case of server error (4xx, 5xx) this contains the server response
+         *                  in case of IO exception this is null
+         * @param throwable - contains the exception. in case of server error (4xx, 5xx) this is null
+         */
+        public void onFailure(final Response response, final Throwable throwable);
+
+        /**
+         * contains the server response
+         */
+        public void onSuccess();
+    }
+
+    public interface DeviceInfoCallback {
+
+        public void onError(final Request request, final IOException e);
+
+        /**
+         * called when the server response was not 2xx or when an exception was thrown in the process
+         *
+         * @param response  - in case of server error (4xx, 5xx) this contains the server response
+         *                  in case of IO exception this is null
+         * @param throwable - contains the exception. in case of server error (4xx, 5xx) this is null
+         */
+        public void onFailure(final Response response, final Throwable throwable);
+
+        /**
+         * contains the server response
+         *
+         * @param rokuDeviceInfo
+         */
+        public void onSuccess(final RokuDeviceInfo rokuDeviceInfo);
     }
 }
