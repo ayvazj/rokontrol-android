@@ -30,7 +30,8 @@ def developerEmail = POM_DEVELOPER_EMAIL
 
 def bintrayUser = bintrayUsername
 def bintrayApikey = bintrayKey
-
+def sonatypeUser = sonatypeUsername
+def sonatypePass = sonatypePassword
 def javadocName = properties.getProperty("javadoc.name")
 
 group = projectGroupId
@@ -129,10 +130,10 @@ bintray {
 //              passphrase = 'passphrase' //Optional. The passphrase for GPG signing'
 //          }
             mavenCentralSync {
-                sync = false // Optional (true by default).
+                sync = true // Optional (true by default).
                             // Determines whether to sync the version to Maven Central.
-                user = ossrhUsername //OSS user token
-                password = ossrhPassword //OSS user password
+                user = sonatypeUser //OSS user token
+                password = sonatypePass //OSS user password
                 close = '1' // Optional property. By default the staging
                             // repository is closed and artifacts are released to
                             // Maven Central. You can optionally turn this behaviour off
