@@ -51,7 +51,6 @@ public class RokuWifiDiscovery {
             multicastLock.setReferenceCounted(true);
             multicastLock.acquire();
 
-
             try {
                 SSDPSearchMsg searchProduct = new SSDPSearchMsg(String.format("%s:%s", SSDP.ST, "roku:ecp"));
                 SSDPSocket sock = new SSDPSocket(RokuWifiDiscovery.this.context);
@@ -72,7 +71,8 @@ public class RokuWifiDiscovery {
             }
 
             for (DatagramPacket resp : resps) {
-                this.results.add(new RokuSearchResult(new String(resp.getData(), 0, resp.getLength())));
+                String str = new String(resp.getData(), 0, resp.getLength());
+                this.results.add(new RokuSearchResult(str));
             }
             return null;
         }
@@ -80,7 +80,7 @@ public class RokuWifiDiscovery {
         @Override
         protected void onPostExecute(Void result) {
             if (this.listener != null) {
-                this.listener.onSearchForDevicesOnNetworkComplete(results);
+                this.listener.onSearchForDevicesOnNetworkComplete(this.results);
             }
         }
     }

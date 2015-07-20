@@ -7,7 +7,6 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
@@ -57,7 +56,7 @@ public class SSDPSocket {
      */
     public List<DatagramPacket> receive() throws IOException {
         long start = System.currentTimeMillis();
-        byte[] buf = new byte[1024];
+
 
         List<DatagramPacket> packets = new ArrayList<DatagramPacket>();
         // Loop and try to receive responses until the timeout elapses. We'll get
@@ -65,6 +64,7 @@ public class SSDPSocket {
         // discard it in parseResponse because the cmd is wrong.
         try {
             while (true) {
+                byte[] buf = new byte[1024];
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 mLocalSocket.receive(packet);
                 packets.add(packet);
